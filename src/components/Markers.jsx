@@ -43,7 +43,11 @@ export default function Markers() {
                     lng: mark.longitude,
                 }}
                 draggable={toolSelected.name === toolsMap.MOVE.name}
-                icon={getIconMarker({ icon: markTool.icon })}
+                icon={getIconMarker({
+                    width: 50,
+                    height: 50,
+                    icon: markTool.icon,
+                })}
                 eventHandlers={{
                     click: () => {
                         if (toolSelected.name === toolsMap.TRASH.name) {
