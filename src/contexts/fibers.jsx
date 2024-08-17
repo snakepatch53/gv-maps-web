@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 
-import { getFibers, newFiber } from "../services/fibers";
+import { getFibersByMapId, newFiber } from "../services/fibers";
 import { destroyFiberMarker, newFiberMarker, updateFiberMarker } from "../services/fiber_markers";
 import { toolsMap } from "../lib/constants";
+import { useParams } from "react-router-dom";
 
 // 1. Crear el contexto
 export const FibersContext = createContext();
@@ -11,10 +12,15 @@ export const FibersContext = createContext();
 export function FibersProvider({ children }) {
     const [fibers, setFibers] = useState(null);
     const [fiberSelected, setFiberSelected] = useState(null);
+    const { map_id } = useParams();
 
     useEffect(() => {
-        getFibers().then((res) => setFibers(res));
-    }, []);
+        if (!map_id) return;
+        getFibersByMapId(map_id).then((res) => {
+            console.log(res);
+            setFibers(res.data);
+        });
+    }, [map_id]);
 
     const addFiber = (marker) => {
         newFiber(marker).then((res) => {

@@ -17,6 +17,14 @@ export async function getMarkers() {
     return mapNames(response);
 }
 
+export async function getMarkersByMapId(map_id) {
+    const response = await fetchAdapter({
+        resource: resource + "/get-by-map-id/" + map_id,
+        // printResponse: true,
+    });
+    return mapNames(response);
+}
+
 export async function newMarker(data) {
     const response = await fetchAdapter({
         resource,

@@ -2,19 +2,22 @@ import { fetchAdapter } from "./apiConfig";
 
 const resource = "fibers";
 
-function mapNames(data) {
-    if (!data) return [];
-    return data.map(({ ...props }) => ({
-        ...props,
-    }));
-}
-
 export async function getFibers() {
     const response = await fetchAdapter({
         resource: resource + "?includeFiberMarkers=true",
+        all: true,
         // printResponse: true,
     });
-    return mapNames(response);
+    return response;
+}
+
+export async function getFibersByMapId(map_id) {
+    const response = await fetchAdapter({
+        resource: resource + "/get-by-map-id/" + map_id + "?includeFiberMarkers=true",
+        all: true,
+        // printResponse: true,
+    });
+    return response;
 }
 
 export async function newFiber(data) {

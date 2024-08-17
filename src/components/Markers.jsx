@@ -44,8 +44,8 @@ export default function Markers() {
                 }}
                 draggable={toolSelected.name === toolsMap.MOVE.name}
                 icon={getIconMarker({
-                    width: 50,
-                    height: 50,
+                    width: 45,
+                    height: 45,
                     icon: markTool.icon,
                 })}
                 eventHandlers={{

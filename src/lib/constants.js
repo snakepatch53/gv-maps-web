@@ -46,21 +46,21 @@ export const toolsMap = {
     ADSS: {
         name: "ADSS",
         icon: faRoute,
-        color: "red",
+        color: "black",
         cursor: "crosshair",
         weight: 5
     },
     MINI_ADSS: {
         name: "Mini ADSS",
         icon: faRoute,
-        color: "blue",
+        color: "orange",
         cursor: "crosshair",
         weight: 4
     },
     DROP: {
         name: "Drop",
         icon: faRoute,
-        color: "green",
+        color: "blue",
         cursor: "crosshair",
         weight: 3
     },
