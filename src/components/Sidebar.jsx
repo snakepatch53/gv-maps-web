@@ -12,6 +12,7 @@ import {
 import { useContext } from "react";
 import { SidebarContext } from "../contexts/sidebar";
 import { SessionContext } from "../contexts/session";
+import { SuperAdminOptions } from "../guards/SuperAdminGuard";
 
 export default function Sidebar({ className = "" }) {
     const { isOpenSidebar } = useContext(SidebarContext);
@@ -42,7 +43,9 @@ export default function Sidebar({ className = "" }) {
             </div>
             <br />
             <Option title="Inicio" icon={faHome} to="./home" />
-            <Option title="Empresas" icon={faBusinessTime} to="./entities" />
+            <SuperAdminOptions>
+                <Option title="Empresas" icon={faBusinessTime} to="./entities" />
+            </SuperAdminOptions>
             <Option title="Mapas" icon={faMap} to="./maps" />
             <Option title="Usuarios" icon={faUsers} to="./users" />
 

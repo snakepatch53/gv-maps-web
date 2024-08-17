@@ -8,6 +8,7 @@ import { cls } from "./lib/utils";
 import { MapviewProvider } from "./contexts/mapview";
 import { MarkersProvider } from "./contexts/markers";
 import { FibersProvider } from "./contexts/fibers";
+import SuperAdminGuard from "./guards/SuperAdminGuard";
 
 const Home = lazy(() => import("./views/Home"));
 const Entities = lazy(() => import("./panel.views/Entities"));
@@ -33,7 +34,9 @@ export default function RouterPanel() {
                 <div className=" flex flex-col min-h-full bg-black/5  ">
                     <Routes>
                         <Route path="/home" element={<Home />} />
-                        <Route path="/entities" element={<Entities />} />
+                        <Route element={<SuperAdminGuard />}>
+                            <Route path="/entities" element={<Entities />} />
+                        </Route>
                         <Route path="/maps" element={<Maps />} />
                         <Route
                             path="/map/:map_id"
