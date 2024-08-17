@@ -10,8 +10,8 @@ function mapNames(data) {
 
 export async function getMaps() {
     const response = await fetchAdapter({
-        resource: resource + "?includeUser=true&includeEntity=true",
-        printResponse: true,
+        resource: resource + "?includeUser=true&includeUserEntity=true",
+        // printResponse: true,
     });
     return mapNames(response);
 }

@@ -61,8 +61,8 @@ export default function Maps() {
                 onRowPrint={(item) => (
                     <tr key={item.id}>
                         <CrudTableTdText value={item.name} />
-                        <CrudTableTdText value={item.entity?.name} />
-                        <CrudTableTdText value={item.user?.name} />
+                        <CrudTableTdText value={item?.user?.entity?.name} />
+                        <CrudTableTdText value={item?.user?.name} />
                         <CrudTableTdFlex>
                             <Button
                                 tag={Link}
