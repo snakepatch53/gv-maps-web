@@ -11,7 +11,13 @@ export const toolsMap = {
         name: "Mover",
         icon: faArrowsUpDownLeftRight,
         color: "#111111",
-        cursor: "move"
+        cursor: "pointer"
+    },
+    TRASH: {
+        name: "Eliminar",
+        icon: faTrash,
+        color: "red",
+        cursor: "pointer"
     },
     DOMO: {
         name: "Domo",
@@ -64,10 +70,5 @@ export const toolsMap = {
         cursor: "crosshair",
         weight: 3
     },
-    TRASH: {
-        name: "Eliminar",
-        icon: faTrash,
-        color: "red",
-        cursor: "url(/cursor.png), auto"
-    },
+
 };

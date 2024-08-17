@@ -13,6 +13,7 @@ import SessionOutGuard from "./guards/SessionOutGuard";
 const Login = lazy(() => import("./views/Login"));
 // const RouterPanel = lazy(() => import("./RouterPanel"));
 const NotFound = lazy(() => import("./views/NotFound"));
+const PublicMap = lazy(() => import("./landing.views/PublicMap"));
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
             <BrowserRouter>
                 <Notification />
                 <Routes>
+                    <Route path="/public-map/:map_id" element={<PublicMap />} />
                     <Route element={<SessionOutGuard />}>
                         <Route path="/" element={<Login />} />
                         <Route path="/login" element={<Login />} />

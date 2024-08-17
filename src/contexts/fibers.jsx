@@ -17,7 +17,6 @@ export function FibersProvider({ children }) {
     useEffect(() => {
         if (!map_id) return;
         getFibersByMapId(map_id).then((res) => {
-            console.log(res);
             setFibers(res.data);
         });
     }, [map_id]);

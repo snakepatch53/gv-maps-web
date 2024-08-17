@@ -10,10 +10,10 @@ import { MarkersProvider } from "./contexts/markers";
 import { FibersProvider } from "./contexts/fibers";
 import SuperAdminGuard from "./guards/SuperAdminGuard";
 
-const Home = lazy(() => import("./views/Home"));
+const Home = lazy(() => import("./panel.views/Home"));
 const Entities = lazy(() => import("./panel.views/Entities"));
 const Maps = lazy(() => import("./panel.views/Maps"));
-const MapView = lazy(() => import("./views/MapView"));
+const MapView = lazy(() => import("./panel.views/MapView"));
 
 export default function RouterPanel() {
     const { isOpenSidebar } = useContext(SidebarContext);

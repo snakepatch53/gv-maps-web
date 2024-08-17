@@ -1,4 +1,4 @@
-import { LayersControl, MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Markers from "../components/Markers";
 import { useContext, useEffect, useRef } from "react";
@@ -10,8 +10,7 @@ import { toolsMap } from "../lib/constants";
 import { MapviewContext } from "../contexts/mapview";
 import Fibers from "../components/Fibers";
 import L from "leaflet";
-
-const { BaseLayer } = LayersControl;
+import MapLayerControl from "../components/MapLayerControl";
 
 export default function MapView() {
     const { isOpenHeaderOptions } = useContext(HeaderContext);
@@ -75,6 +74,7 @@ const LeafletMap = () => {
     useEffect(() => {
         if (!mapRef.current) return;
         document.querySelector(".leaflet-container").style.cursor = toolSelected.cursor;
+        console.log(toolSelected.cursor);
     }, [toolSelected]);
     return (
         <MapContainer
@@ -90,24 +90,7 @@ const LeafletMap = () => {
                 width: "100%",
             }}
         >
-            <LayersControl position="topright">
-                <BaseLayer checked name="Normal">
-                    <TileLayer
-                        checked
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                </BaseLayer>
-                <BaseLayer name="Satélite">
-                    <TileLayer url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
-                </BaseLayer>
-                <BaseLayer name="Light">
-                    <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
-                </BaseLayer>
-                <BaseLayer name="Dark">
-                    <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-                </BaseLayer>
-            </LayersControl>
+            <MapLayerControl />
             <Markers />
             <Fibers />
         </MapContainer>
