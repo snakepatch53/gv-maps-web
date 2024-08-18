@@ -74,7 +74,6 @@ const LeafletMap = () => {
     useEffect(() => {
         if (!mapRef.current) return;
         document.querySelector(".leaflet-container").style.cursor = toolSelected.cursor;
-        console.log(toolSelected.cursor);
     }, [toolSelected]);
     return (
         <MapContainer

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Marker, Popup, useMapEvents } from "react-leaflet";
 import { MapviewContext } from "../contexts/mapview";
-import { toolsMap } from "../lib/constants";
+import { toolsMap, typeTools } from "../lib/constants";
 import { MarkersContext } from "../contexts/markers";
 import { useParams } from "react-router-dom";
 import { getIconMarker } from "../lib/utils";
@@ -13,16 +13,8 @@ export default function Markers() {
 
     useMapEvents({
         click(e) {
-            if (
-                toolSelected.name !== toolsMap.DOMO.name &&
-                toolSelected.name !== toolsMap.MANGA.name &&
-                toolSelected.name !== toolsMap.RESERVA.name &&
-                toolSelected.name !== toolsMap.NAP1.name &&
-                toolSelected.name !== toolsMap.NAP2.name &&
-                toolSelected.name !== toolsMap.ONT.name
-            ) {
-                return;
-            }
+            if (toolSelected.type !== typeTools.MARKER) return;
+
             addMarker({
                 latitude: e.latlng.lat,
                 longitude: e.latlng.lng,
