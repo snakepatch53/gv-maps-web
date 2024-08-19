@@ -37,7 +37,7 @@ export function MapviewProvider({ children }) {
         if (results.length > 0) {
             const { lat, lon } = results[0];
             const latlng = L.latLng(lat, lon);
-            const marker = L.marker(latlng)
+            L.marker(latlng)
                 .addTo(map)
                 .bindPopup("Ubicación encontrada")
                 .addEventListener("click", (e) => {
@@ -51,9 +51,6 @@ export function MapviewProvider({ children }) {
                 )
                 .openPopup();
             map.setView(latlng, 13);
-            setTimeout(() => {
-                marker.remove();
-            }, 3000);
             return true;
         }
         return false;
