@@ -45,7 +45,6 @@ export function MarkersProvider({ children }) {
     };
 
     const _updateMarker = (marker_id, data) => {
-        // console.log(marker_id, data);
         return updateMarker(marker_id, data).then((res) => {
             if (!res.success)
                 return showNotification({ title: "Error", message: res.message, type: "danger" });

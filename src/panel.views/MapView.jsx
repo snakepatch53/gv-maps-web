@@ -13,19 +13,23 @@ import MapMarkers from "../panel.components/MapMarkers";
 import MapFibers from "../panel.components/MapFibers";
 import MapMarkerForm from "../panel.components/MapMarkerForm";
 import { MarkersContext } from "../contexts/markers";
+import MapFiberForm from "../panel.components/MapFiberForm";
+import { FibersContext } from "../contexts/fibers";
 
 export default function MapView() {
     const { isOpenHeaderOptions } = useContext(HeaderContext);
     const { isMarkerFormOpen } = useContext(MarkersContext);
+    const { isFiberFormOpen } = useContext(FibersContext);
 
     // reload leafletmap when change toolSelected
 
     return (
         <div className=" relative flex w-full h-full ">
             <MapMarkerForm />
+            <MapFiberForm />
             <div
                 className={cls(" relative flex w-full h-full p-7", {
-                    " -z-10 ": isOpenHeaderOptions || isMarkerFormOpen,
+                    " -z-10 ": isOpenHeaderOptions || isMarkerFormOpen || isFiberFormOpen,
                 })}
             >
                 <div className=" flex flex-col w-full h-full rounded-2xl shadow-xl overflow-hidden bg-white ">

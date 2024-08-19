@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fiberColors } from "../lib/constants";
 import { cls } from "../lib/utils";
 
-export default function FiberColorPicker({ value, onChange }) {
+export default function MarkerNapThreadColorPicker({ value, onChange }) {
     const [selected, setSelected] = useState(value);
     const handleChange = (color, i) => {
         setSelected(color);

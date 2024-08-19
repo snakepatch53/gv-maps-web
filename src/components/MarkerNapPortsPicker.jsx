@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { cls } from "../lib/utils";
 
-export default function FiberPortsPicker({ value, onChange }) {
+export default function MarkerNapPortPicker({ value, onChange }) {
     const [selected, setSelected] = useState(value);
 
     const handleChange = (port) => () => {

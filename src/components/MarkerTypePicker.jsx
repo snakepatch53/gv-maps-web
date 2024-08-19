@@ -1,7 +1,7 @@
 import { toolsMap, typeTools } from "../lib/constants";
 import { cls } from "../lib/utils";
 
-export default function MarkerFormTypePicker({ selected, onSelect }) {
+export default function MarkerTypePicker({ selected, onSelect }) {
     const typeMarkers = Object.values(toolsMap).filter((tool) => tool.type === typeTools.MARKER);
     if (!selected) selected = typeMarkers[0];
     return (

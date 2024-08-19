@@ -1,9 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 
-import { getFibersByMapId, newFiber } from "../services/fibers";
+import { destroyFiber, getFibersByMapId, newFiber, updateFiber } from "../services/fibers";
 import { destroyFiberMarker, newFiberMarker, updateFiberMarker } from "../services/fiber_markers";
 import { toolsMap } from "../lib/constants";
 import { useParams } from "react-router-dom";
+import { showNotification } from "../components/Notification";
 
 // 1. Crear el contexto
 export const FibersContext = createContext();
@@ -12,6 +13,8 @@ export const FibersContext = createContext();
 export function FibersProvider({ children }) {
     const [fibers, setFibers] = useState(null);
     const [fiberSelected, setFiberSelected] = useState(null);
+    const [isFiberFormOpen, setIsFiberFormOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const { map_id } = useParams();
 
     useEffect(() => {
@@ -149,6 +152,48 @@ export function FibersProvider({ children }) {
         );
     };
 
+    const openFiberForm = (fiber) => {
+        setFiberSelected(fiber);
+        setIsFiberFormOpen(true);
+    };
+
+    const closeFiberForm = () => {
+        setFiberSelected(null);
+        setIsFiberFormOpen(false);
+    };
+
+    const _updateFiber = (fiber_id, data) => {
+        return updateFiber(fiber_id, data).then((res) => {
+            if (!res.success)
+                return showNotification({ title: "Error", message: res.message, type: "danger" });
+            setFibers(res.data);
+            closeFiberForm();
+            showNotification({
+                title: "Exito",
+                message: "Fibra actualizado",
+                type: "success",
+                duration: 1000,
+            });
+        });
+    };
+
+    const deleteFiber = (fiber_id) => {
+        setIsLoading(true);
+        destroyFiber(fiber_id).then((res) => {
+            setIsLoading(false);
+            if (!res.success)
+                return showNotification({ title: "Error", message: res.message, type: "danger" });
+            setFibers(res.data);
+            closeFiberForm();
+            showNotification({
+                title: "Exito",
+                message: "Fibra eliminada",
+                type: "success",
+                duration: 1000,
+            });
+        });
+    };
+
     return (
         <FibersContext.Provider
             value={{
@@ -158,6 +203,13 @@ export function FibersProvider({ children }) {
                 handleLineClick,
                 onToolChange,
                 removeFiberMarker,
+                fiberSelected,
+                isFiberFormOpen,
+                openFiberForm,
+                closeFiberForm,
+                updateFiber: _updateFiber,
+                deleteFiber,
+                isLoading,
             }}
         >
             {children}

@@ -30,13 +30,12 @@ export async function newFiber(data) {
     return response;
 }
 
-export async function updateFiber({ id, data }) {
+export async function updateFiber(id, data) {
     const response = await fetchAdapter({
         resource: resource + "/" + id,
         data,
-        method: "POST",
+        method: "PUT",
         all: true,
-        formData: true,
         // printResponse: true,
     });
     return response;

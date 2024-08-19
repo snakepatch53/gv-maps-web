@@ -4,11 +4,12 @@ import { cls } from "../lib/utils";
 import { MarkersContext } from "../contexts/markers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faTimes } from "@fortawesome/free-solid-svg-icons";
-import FiberColorPicker from "../components/FiberColorPicker";
-import FiberPortsPicker from "../components/FiberPortsPicker";
-import MarkerFormTypePicker from "../components/MarkerFormTypePicker";
 import { ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
+import MarkerNapThreadColorPicker from "../components/MarkerNapTheadColorPicker";
+
+import MarkerTypePicker from "../components/MarkerTypePicker";
+import MarkerNapPortPicker from "../components/MarkerNapPortsPicker";
 
 export default function MapMarkerForm() {
     const windowRef = useRef(null);
@@ -102,7 +103,6 @@ function Form() {
                 return (
                     <form onSubmit={handleSubmit} className=" flex flex-col ">
                         <InputText name="name" label="Nombre:" placeholder="Nombre del marcador" />
-                        <input type="text" />
 
                         <div className=" flex gap-3 ">
                             <InputText name="latitude" label="Latitud:" placeholder="Latitud" />
@@ -125,7 +125,7 @@ function Form() {
                                 </span>
                             </label>
                             <div className=" flex justify-evenly ">
-                                <MarkerFormTypePicker
+                                <MarkerTypePicker
                                     selected={markerSelectedType}
                                     onSelect={(tool) => {
                                         handleChangeMarkerType(tool);
@@ -151,7 +151,7 @@ function Form() {
                                 <div className=" flex gap-4 ">
                                     <div className=" flex flex-col gap-2 ">
                                         <Label text="Buffer:" />
-                                        <FiberColorPicker
+                                        <MarkerNapThreadColorPicker
                                             onChange={(_, color) =>
                                                 handleChange({
                                                     target: { name: "nap_buffer", value: color },
@@ -163,7 +163,7 @@ function Form() {
                                     </div>
                                     <div className=" flex flex-col gap-2 ">
                                         <Label text="Hilo:" />
-                                        <FiberColorPicker
+                                        <MarkerNapThreadColorPicker
                                             onChange={(_, color) =>
                                                 handleChange({
                                                     target: { name: "nap_thread", value: color },
@@ -176,7 +176,7 @@ function Form() {
                                 </div>
                                 <div>
                                     <Label text="Numero de Puertos:" />
-                                    <FiberPortsPicker value={values.nap_ports} />
+                                    <MarkerNapPortPicker value={values.nap_ports} />
                                 </div>
                             </>
                         )}

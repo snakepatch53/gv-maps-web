@@ -8,8 +8,15 @@ import { useParams } from "react-router-dom";
 
 export default function MapFibers() {
     const { map_id } = useParams();
-    const { fibers, handleClick, handleLineClick, handleDrag, onToolChange, removeFiberMarker } =
-        useContext(FibersContext);
+    const {
+        fibers,
+        handleClick,
+        handleLineClick,
+        handleDrag,
+        onToolChange,
+        removeFiberMarker,
+        openFiberForm,
+    } = useContext(FibersContext);
     const { toolSelected } = useContext(MapviewContext);
 
     useEffect(() => {
@@ -39,6 +46,10 @@ export default function MapFibers() {
                         click: (e) => {
                             if (toolSelected.name === toolsMap.MOVE.name)
                                 handleLineClick(e, fiber.id);
+                        },
+                        dblclick: () => {
+                            if (toolSelected.name !== toolsMap.POINTER.name) return;
+                            openFiberForm(fiber);
                         },
                     }}
                 >
