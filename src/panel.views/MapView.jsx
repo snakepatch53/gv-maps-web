@@ -1,13 +1,12 @@
 import { MapContainer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useContext, useEffect, useRef } from "react";
+import { useContext } from "react";
 import { HeaderContext } from "../contexts/header";
 import { cls } from "../lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { toolsMap } from "../lib/constants";
 import { MapviewContext } from "../contexts/mapview";
-import L from "leaflet";
 import MapLayerControl from "../components/MapLayerControl";
 import MapMarkers from "../panel.components/MapMarkers";
 import MapFibers from "../panel.components/MapFibers";
@@ -15,8 +14,10 @@ import MapMarkerForm from "../panel.components/MapMarkerForm";
 import { MarkersContext } from "../contexts/markers";
 import MapFiberForm from "../panel.components/MapFiberForm";
 import { FibersContext } from "../contexts/fibers";
+import useMapView from "../hooks/useMapView";
 
 export default function MapView() {
+    const { isSearching, searchLocation } = useContext(MapviewContext);
     const { isOpenHeaderOptions } = useContext(HeaderContext);
     const { isMarkerFormOpen } = useContext(MarkersContext);
     const { isFiberFormOpen } = useContext(FibersContext);
@@ -37,9 +38,28 @@ export default function MapView() {
                         {Object.values(toolsMap).map((tool) => (
                             <Option key={tool.name} tool={tool} />
                         ))}
-                        <div className=" flex items-center border w-full max-w-96 py-2 px-2 ml-auto rounded ">
-                            <input className=" w-full " type="text" placeholder="Buscar lugar" />
-                            <FontAwesomeIcon icon={faSearch} />
+                        <div
+                            className={cls(
+                                " flex items-center border w-full max-w-96 py-2 px-2 ml-auto rounded ",
+                                {
+                                    " bg-black/5 ": isSearching,
+                                    " bg-white ": !isSearching,
+                                }
+                            )}
+                        >
+                            <input
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        if (searchLocation(e.target.value)) e.target.value = "";
+                                    }
+                                }}
+                                className={" w-full "}
+                                type="text"
+                                placeholder="Buscar lugar"
+                                disabled={isSearching}
+                            />
+                            {isSearching && <FontAwesomeIcon icon={faSpinner} spin />}
+                            {!isSearching && <FontAwesomeIcon icon={faSearch} />}
                         </div>
                     </div>
 
@@ -50,54 +70,18 @@ export default function MapView() {
     );
 }
 
-const geocode = async (query) => {
-    const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${query}&format=json`
-    );
-    const data = await response.json();
-    return data;
-};
-
 const LeafletMap = () => {
-    const { toolSelected } = useContext(MapviewContext);
-    const mapRef = useRef(null);
+    const { mapRef } = useContext(MapviewContext);
+    useMapView({
+        mapRef,
+    });
 
-    useEffect(() => {
-        if (mapRef.current) {
-            const map = mapRef.current;
-
-            const handleSearch = async (query) => {
-                const results = await geocode(query);
-                if (results.length > 0) {
-                    const { lat, lon } = results[0];
-                    const latlng = L.latLng(lat, lon);
-                    L.marker(latlng).addTo(map).bindPopup("Ubicación encontrada").openPopup();
-                    map.setView(latlng, 13);
-                }
-            };
-
-            // Ejemplo de búsqueda
-            handleSearch("New York");
-        }
-    }, []);
-
-    useEffect(() => {
-        if (!mapRef.current) return;
-        document.querySelector(".leaflet-container").style.cursor = toolSelected.cursor;
-    }, [toolSelected]);
     return (
         <MapContainer
             ref={mapRef}
             className={cls(" flex w-full h-full cursor-pointer ")}
-            center={{
-                lat: -2.3093213892775175,
-                lng: -78.12541130262117,
-            }}
-            zoom={16}
-            style={{
-                height: "100%",
-                width: "100%",
-            }}
+            center={[-2.3093213892775175, -78.12541130262117]}
+            zoom={3}
         >
             <MapLayerControl />
             <MapMarkers />

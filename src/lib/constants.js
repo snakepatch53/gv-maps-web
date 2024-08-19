@@ -113,3 +113,37 @@ export const fiberColors = {
     11: "#ffc0cb",
     12: "#00ffff"
 };
+
+
+export const layersMap = [
+    {
+        id: 1,
+        name: "Open Street Map",
+        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+    {
+        id: 2,
+        name: "Google Satélite Hybrid",
+        url: "http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}",
+        attribution: "© Google Maps",
+    },
+    {
+        id: 3,
+        name: "Argis Satélite",
+        url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        attribution: "© Esri",
+    },
+    {
+        id: 4,
+        name: "Clean Carto Map",
+        url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        attribution: "© carto",
+    },
+    {
+        id: 5,
+        name: "Dark Carto Map",
+        url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        attribution: "© carto",
+    },
+]

@@ -1,25 +1,30 @@
-import { LayersControl, TileLayer } from "react-leaflet";
+import { LayersControl, TileLayer, useMapEvents } from "react-leaflet";
+import { layersMap } from "../lib/constants";
+import { useContext } from "react";
+import { MapviewContext } from "../contexts/mapview";
 
 const { BaseLayer } = LayersControl;
 export default function MapLayerControl() {
     return (
         <LayersControl position="topright">
-            <BaseLayer checked name="Normal">
-                <TileLayer
-                    checked
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-            </BaseLayer>
-            <BaseLayer name="Satélite">
-                <TileLayer url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
-            </BaseLayer>
-            <BaseLayer name="Light">
-                <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
-            </BaseLayer>
-            <BaseLayer name="Dark">
-                <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            </BaseLayer>
+            {layersMap.map((layer) => (
+                <MyTileLayer key={layer.name} layer={layer} />
+            ))}
         </LayersControl>
+    );
+}
+
+function MyTileLayer({ layer }) {
+    const { layerSelected, selectLayer } = useContext(MapviewContext);
+
+    useMapEvents({
+        baselayerchange: () => selectLayer(layer),
+    });
+
+    if (!layerSelected) return null;
+    return (
+        <BaseLayer name={layer.name} checked={layerSelected?.id === layer.id}>
+            <TileLayer url={layer.url} />
+        </BaseLayer>
     );
 }
