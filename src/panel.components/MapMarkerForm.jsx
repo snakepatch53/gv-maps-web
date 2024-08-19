@@ -3,7 +3,7 @@ import { toolsMap, typeTools } from "../lib/constants";
 import { cls } from "../lib/utils";
 import { MarkersContext } from "../contexts/markers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faTimes } from "@fortawesome/free-solid-svg-icons";
 import FiberColorPicker from "../components/FiberColorPicker";
 import FiberPortsPicker from "../components/FiberPortsPicker";
 import MarkerFormTypePicker from "../components/MarkerFormTypePicker";
@@ -188,8 +188,9 @@ function Form() {
                                     " opacity-50 cursor-not-allowed ": isSubmitting,
                                 }
                             )}
+                            disabled={isSubmitting}
                         >
-                            Guardar
+                            {isSubmitting ? <FontAwesomeIcon icon={faSpinner} spin /> : "Guardar"}
                         </button>
                     </form>
                 );
