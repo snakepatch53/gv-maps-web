@@ -46,7 +46,7 @@ export function MapviewProvider({ children }) {
                 .setIcon(
                     L.icon({
                         iconUrl: "/marker.png",
-                        iconSize: [35, 45],
+                        iconSize: [30, 45],
                     })
                 )
                 .openPopup();
