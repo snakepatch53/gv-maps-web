@@ -19,7 +19,7 @@ export const toolsMap = {
         name: "Mover",
         icon: faArrowsUpDownLeftRight,
         color: "#111111",
-        cursor: "pointer",
+        cursor: "move",
         type: typeTools.ACTION
     },
     TRASH: {
