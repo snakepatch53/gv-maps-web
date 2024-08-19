@@ -43,11 +43,17 @@ export function MapviewProvider({ children }) {
                 .addEventListener("click", (e) => {
                     e.target.remove();
                 })
+                .setIcon(
+                    L.icon({
+                        iconUrl: "/marker.png",
+                        iconSize: [35, 45],
+                    })
+                )
                 .openPopup();
             map.setView(latlng, 13);
             setTimeout(() => {
                 marker.remove();
-            }, 2000);
+            }, 3000);
             return true;
         }
         return false;
