@@ -1,6 +1,5 @@
 import { MapContainer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import Markers from "../components/Markers";
 import { useContext, useEffect, useRef } from "react";
 import { HeaderContext } from "../contexts/header";
 import { cls } from "../lib/utils";
@@ -8,33 +7,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { toolsMap } from "../lib/constants";
 import { MapviewContext } from "../contexts/mapview";
-import Fibers from "../components/Fibers";
 import L from "leaflet";
 import MapLayerControl from "../components/MapLayerControl";
+import MapMarkers from "../panel.components/MapMarkers";
+import MapFibers from "../panel.components/MapFibers";
+import MapMarkerForm from "../panel.components/MapMarkerForm";
+import { MarkersContext } from "../contexts/markers";
 
 export default function MapView() {
     const { isOpenHeaderOptions } = useContext(HeaderContext);
+    const { isMarkerFormOpen } = useContext(MarkersContext);
 
     // reload leafletmap when change toolSelected
 
     return (
-        <div
-            className={cls(" relative flex w-full h-full p-7", {
-                " -z-10 ": isOpenHeaderOptions,
-            })}
-        >
-            <div className=" flex flex-col w-full h-full rounded-2xl shadow-xl overflow-hidden bg-white ">
-                <div className=" flex items-center py-1 px-4 ">
-                    {Object.values(toolsMap).map((tool) => (
-                        <Option key={tool.name} tool={tool} />
-                    ))}
-                    <div className=" flex items-center border w-full max-w-96 py-2 px-2 ml-auto rounded ">
-                        <input className=" w-full " type="text" placeholder="Buscar lugar" />
-                        <FontAwesomeIcon icon={faSearch} />
+        <div className=" relative flex w-full h-full ">
+            <MapMarkerForm />
+            <div
+                className={cls(" relative flex w-full h-full p-7", {
+                    " -z-10 ": isOpenHeaderOptions || isMarkerFormOpen,
+                })}
+            >
+                <div className=" flex flex-col w-full h-full rounded-2xl shadow-xl overflow-hidden bg-white ">
+                    <div className=" flex items-center py-1 px-4 ">
+                        {Object.values(toolsMap).map((tool) => (
+                            <Option key={tool.name} tool={tool} />
+                        ))}
+                        <div className=" flex items-center border w-full max-w-96 py-2 px-2 ml-auto rounded ">
+                            <input className=" w-full " type="text" placeholder="Buscar lugar" />
+                            <FontAwesomeIcon icon={faSearch} />
+                        </div>
                     </div>
-                </div>
 
-                <LeafletMap />
+                    <LeafletMap />
+                </div>
             </div>
         </div>
     );
@@ -90,8 +96,8 @@ const LeafletMap = () => {
             }}
         >
             <MapLayerControl />
-            <Markers />
-            <Fibers />
+            <MapMarkers />
+            <MapFibers />
         </MapContainer>
     );
 };

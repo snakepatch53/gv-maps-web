@@ -99,6 +99,7 @@ function Input({ isPass = false, name, placeholder, icon }) {
                 <FontAwesomeIcon className=" opacity-70 " icon={icon} />
                 <Field
                     name={name}
+                    as="input"
                     className=" bg-transparent w-full text-lg "
                     type={isPass && showPass === false ? "password" : "text"}
                     placeholder={placeholder}

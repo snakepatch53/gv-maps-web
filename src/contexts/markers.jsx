@@ -4,8 +4,10 @@ import {
     moveMarker as _moveMarker,
     destroyMarker,
     getMarkersByMapId,
+    updateMarker,
 } from "../services/markers";
 import { useParams } from "react-router-dom";
+import { showNotification } from "../components/Notification";
 
 // 1. Crear el contexto
 export const MarkersContext = createContext();
@@ -14,6 +16,7 @@ export const MarkersContext = createContext();
 export function MarkersProvider({ children }) {
     const { map_id } = useParams();
     const [markers, setMarkers] = useState(null);
+    const [markerSelected, setMarkerSelected] = useState(null);
 
     useEffect(() => {
         if (!map_id) return;
@@ -41,6 +44,26 @@ export function MarkersProvider({ children }) {
         });
     };
 
+    const _updateMarker = (marker_id, data) => {
+        // console.log(marker_id, data);
+        return updateMarker(marker_id, data).then((res) => {
+            if (!res.success)
+                return showNotification({ title: "Error", message: res.message, type: "danger" });
+            setMarkers(res.data);
+            closeMarkerForm();
+            showNotification({
+                title: "Exito",
+                message: "Marcador actualizado",
+                type: "success",
+                duration: 1000,
+            });
+        });
+    };
+
+    // opciones de formulario
+    const openMarkerForm = (marker) => setMarkerSelected(marker);
+    const closeMarkerForm = () => setMarkerSelected(null);
+
     return (
         <MarkersContext.Provider
             value={{
@@ -48,6 +71,12 @@ export function MarkersProvider({ children }) {
                 addMarker,
                 moveMarker,
                 removeMarker,
+                // opciones de formulario
+                isMarkerFormOpen: !!markerSelected,
+                markerSelected,
+                openMarkerForm,
+                closeMarkerForm,
+                updateMarker: _updateMarker,
             }}
         >
             {children}

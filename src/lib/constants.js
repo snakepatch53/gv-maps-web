@@ -98,3 +98,18 @@ export const toolsMap = {
 
 };
 
+
+export const fiberColors = {
+    1: "#87cefa",
+    2: "#ffa500",
+    3: "#228b22",
+    4: "#8b4513",
+    5: "#7f7f7f",
+    6: "#cccccc",
+    7: "#ff0000",
+    8: "black",
+    9: "#ffff00",
+    10: "#4b0082",
+    11: "#ffc0cb",
+    12: "#00ffff"
+};

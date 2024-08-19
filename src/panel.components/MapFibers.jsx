@@ -6,7 +6,7 @@ import { FibersContext } from "../contexts/fibers";
 import { calculateTotalDistance, getIconMarker } from "../lib/utils";
 import { useParams } from "react-router-dom";
 
-export default function Fibers() {
+export default function MapFibers() {
     const { map_id } = useParams();
     const { fibers, handleClick, handleLineClick, handleDrag, onToolChange, removeFiberMarker } =
         useContext(FibersContext);

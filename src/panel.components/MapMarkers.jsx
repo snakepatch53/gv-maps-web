@@ -6,10 +6,11 @@ import { MarkersContext } from "../contexts/markers";
 import { useParams } from "react-router-dom";
 import { getIconMarker } from "../lib/utils";
 
-export default function Markers() {
+export default function MapMarkers() {
     const { map_id } = useParams();
     const { toolSelected } = useContext(MapviewContext);
-    const { markers, addMarker, moveMarker, removeMarker } = useContext(MarkersContext);
+    const { markers, addMarker, moveMarker, removeMarker, openMarkerForm } =
+        useContext(MarkersContext);
 
     useMapEvents({
         click(e) {
@@ -47,7 +48,7 @@ export default function Markers() {
                         }
                     },
                     dblclick: () => {
-                        console.log("hola");
+                        openMarkerForm(mark);
                     },
                     dragend: (e) => {
                         if (toolSelected.name === toolsMap.MOVE.name) {
