@@ -6,7 +6,7 @@ import { MapviewContext } from "../contexts/mapview";
 const { BaseLayer } = LayersControl;
 export default function MapLayerControl() {
     return (
-        <LayersControl position="topright">
+        <LayersControl position="topleft">
             {layersMap.map((layer) => (
                 <MyTileLayer key={layer.name} layer={layer} />
             ))}
