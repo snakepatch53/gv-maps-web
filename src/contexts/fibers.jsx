@@ -25,7 +25,10 @@ export function FibersProvider({ children }) {
     }, [map_id]);
 
     const addFiber = (marker) => {
+        if (isLoading) return;
+        setIsLoading(true);
         newFiber(marker).then((res) => {
+            setIsLoading(false);
             setFiberSelected(res.fiber_created);
             setFibers(res.data);
         });
