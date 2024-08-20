@@ -15,6 +15,8 @@ import { MarkersContext } from "../contexts/markers";
 import MapFiberForm from "../panel.components/MapFiberForm";
 import { FibersContext } from "../contexts/fibers";
 import useMapView from "../hooks/useMapView";
+import MapFiberMouseTooltip from "../panel.components/MapFiberMouseTooltip";
+import MapFiberMouseLine from "../panel.components/MapFiberMouseLine";
 
 export default function MapView() {
     const { isSearching, searchLocation } = useContext(MapviewContext);
@@ -86,6 +88,8 @@ const LeafletMap = () => {
             <MapLayerControl />
             <MapMarkers />
             <MapFibers />
+            <MapFiberMouseTooltip />
+            <MapFiberMouseLine />
         </MapContainer>
     );
 };

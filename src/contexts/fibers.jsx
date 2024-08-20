@@ -52,7 +52,10 @@ export function FibersProvider({ children }) {
     };
 
     const addFiberMarker = (marker, fiber_id) => {
+        if (isLoading) return;
+        setIsLoading(true);
         newFiberMarker(marker).then((res) => {
+            setIsLoading(false);
             updateMarkerOfFiber(res.data, fiber_id);
         });
     };

@@ -33,7 +33,9 @@ export function MapviewProvider({ children }) {
         if (!query) return;
         if (!mapRef.current) return;
         const map = mapRef.current;
+        setIsSearching(true);
         const results = await geocode(query);
+        setIsSearching(false);
         if (results.length > 0) {
             const { lat, lon } = results[0];
             const latlng = L.latLng(lat, lon);
@@ -46,7 +48,7 @@ export function MapviewProvider({ children }) {
                 .setIcon(
                     L.icon({
                         iconUrl: "/marker.png",
-                        iconSize: [30, 45],
+                        iconSize: [30, 95],
                     })
                 )
                 .openPopup();
@@ -54,16 +56,6 @@ export function MapviewProvider({ children }) {
             return true;
         }
         return false;
-    };
-
-    const geocode = async (query) => {
-        setIsSearching(true);
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?q=${query}&format=json`
-        );
-        const data = await response.json();
-        setIsSearching(false);
-        return data;
     };
 
     return (
@@ -82,3 +74,11 @@ export function MapviewProvider({ children }) {
         </MapviewContext.Provider>
     );
 }
+
+const geocode = async (query) => {
+    const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${query}&format=json`
+    );
+    const data = await response.json();
+    return data;
+};

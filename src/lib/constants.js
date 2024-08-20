@@ -74,7 +74,7 @@ export const toolsMap = {
     ADSS: {
         name: "ADSS",
         icon: faRoute,
-        color: "black",
+        color: "#191919",
         cursor: "crosshair",
         weight: 5,
         type: typeTools.FIBER
@@ -82,7 +82,7 @@ export const toolsMap = {
     MINI_ADSS: {
         name: "Mini ADSS",
         icon: faRoute,
-        color: "orange",
+        color: "#eeb612",
         cursor: "crosshair",
         weight: 4,
         type: typeTools.FIBER
@@ -90,7 +90,7 @@ export const toolsMap = {
     DROP: {
         name: "Drop",
         icon: faRoute,
-        color: "blue",
+        color: "#276ccf",
         cursor: "crosshair",
         weight: 3,
         type: typeTools.FIBER
