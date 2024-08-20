@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { Marker, Popup, useMapEvents } from "react-leaflet";
+import { LayerGroup, LayersControl, Marker, Popup, useMapEvents } from "react-leaflet";
 import { MapviewContext } from "../contexts/mapview";
 import { toolsMap, typeTools } from "../lib/constants";
 import { MarkersContext } from "../contexts/markers";
 import { useParams } from "react-router-dom";
 import { getIconMarker } from "../lib/utils";
+const { Overlay } = LayersControl;
 
 export default function MapMarkers() {
     const { map_id } = useParams();
@@ -26,58 +27,52 @@ export default function MapMarkers() {
     });
 
     if (!markers || markers === null) return;
-    return markers.map((mark) => {
-        const markTool = Object.values(toolsMap).find((tool) => tool.name === mark.type);
+    // organizar en grupos que correspondan a tipo de marcador
+    const formatedMarkers = markers.reduce((acc, mark) => {
+        if (!acc[mark.type]) acc[mark.type] = [];
+        acc[mark.type].push(mark);
+        return acc;
+    }, {});
+
+    return Object.entries(formatedMarkers).map(([type, marks]) => {
+        const markTool = Object.values(toolsMap).find((tool) => tool.name === type);
         return (
-            <Marker
-                key={mark.id}
-                position={{
-                    lat: mark.latitude,
-                    lng: mark.longitude,
-                }}
-                draggable={toolSelected.name === toolsMap.MOVE.name}
-                icon={getIconMarker({
-                    width: 45,
-                    height: 45,
-                    icon: markTool.icon,
-                })}
-                eventHandlers={{
-                    click: () => {
-                        if (toolSelected.name === toolsMap.TRASH.name) {
-                            removeMarker(mark.id);
-                        }
-                    },
-                    dblclick: () => {
-                        openMarkerForm(mark);
-                    },
-                    dragend: (e) => {
-                        if (toolSelected.name === toolsMap.MOVE.name) {
-                            moveMarker(e, mark.id);
-                        }
-                    },
-                }}
-            >
-                <Popup>{mark.name_auto}</Popup>
-            </Marker>
+            <Overlay key={type} name={type + "'s (" + marks?.length + ")"} checked={true}>
+                <LayerGroup>
+                    {marks.map((mark) => (
+                        <Marker
+                            key={mark.id}
+                            position={{
+                                lat: mark.latitude,
+                                lng: mark.longitude,
+                            }}
+                            draggable={toolSelected.name === toolsMap.MOVE.name}
+                            icon={getIconMarker({
+                                width: 45,
+                                height: 45,
+                                icon: markTool.icon,
+                            })}
+                            eventHandlers={{
+                                click: () => {
+                                    if (toolSelected.name === toolsMap.TRASH.name) {
+                                        removeMarker(mark.id);
+                                    }
+                                },
+                                dblclick: () => {
+                                    openMarkerForm(mark);
+                                },
+                                dragend: (e) => {
+                                    if (toolSelected.name === toolsMap.MOVE.name) {
+                                        moveMarker(e, mark.id);
+                                    }
+                                },
+                            }}
+                        >
+                            <Popup>{mark.name_auto}</Popup>
+                        </Marker>
+                    ))}
+                </LayerGroup>
+            </Overlay>
         );
     });
 }
-
-// function LocationMarker() {
-//     const [position, setPosition] = useState(null);
-//     const map = useMapEvents({
-//         click() {
-//             map.locate();
-//         },
-//         locationfound(e) {
-//             setPosition(e.latlng);
-//             map.flyTo(e.latlng, 15);
-//         },
-//     });
-
-//     return position === null ? null : (
-//         <Marker position={position}>
-//             <Popup>You are here</Popup>
-//         </Marker>
-//     );
-// }

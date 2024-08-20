@@ -4,13 +4,16 @@ import { useContext } from "react";
 import { MapviewContext } from "../contexts/mapview";
 
 const { BaseLayer } = LayersControl;
-export default function MapLayerControl() {
+export default function MapLayerControl({ children }) {
     return (
-        <LayersControl position="topleft">
-            {layersMap.map((layer) => (
-                <MyTileLayer key={layer.name} layer={layer} />
-            ))}
-        </LayersControl>
+        <>
+            <LayersControl position="topleft">
+                {layersMap.map((layer) => (
+                    <MyTileLayer key={layer.name} layer={layer} />
+                ))}
+                {children}
+            </LayersControl>
+        </>
     );
 }
 

@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
-import { Marker, Polyline, Popup, useMapEvents } from "react-leaflet";
+import { LayerGroup, LayersControl, Marker, Polyline, Popup, useMapEvents } from "react-leaflet";
 import { MapviewContext } from "../contexts/mapview";
 import { toolsMap, typeTools } from "../lib/constants";
 import { FibersContext } from "../contexts/fibers";
 import { calculateTotalDistance, getIconMarker } from "../lib/utils";
 import { useParams } from "react-router-dom";
-// import { MousePopupContext } from "../contexts/mousePopup";
+const { Overlay } = LayersControl;
 
 export default function MapFibers() {
     const { map_id } = useParams();
@@ -28,38 +28,50 @@ export default function MapFibers() {
     });
 
     if (!fibers || fibers === null) return;
-    return fibers?.map((fiber) => {
-        const positions = fiber?.fiber_markers?.map((point) => [point.latitude, point.longitude]);
-
-        const markTool = Object.values(toolsMap).find((tool) => tool.name === fiber.type);
-        // if (positions.length < 2) return false;
-
+    // organizar en grupos que correspondan a tipo de fibra
+    const formatedFibers = fibers.reduce((acc, fiber) => {
+        if (!acc[fiber.type]) acc[fiber.type] = [];
+        acc[fiber.type].push(fiber);
+        return acc;
+    }, {});
+    return Object.entries(formatedFibers).map(([type, fibers]) => {
         return (
-            <div key={fiber.id}>
-                <Polyline
-                    pathOptions={{ color: markTool.color }}
-                    positions={positions}
-                    weight={markTool.weight}
-                    eventHandlers={{
-                        click: (e) => {
-                            if (toolSelected.name !== toolsMap.MOVE.name) return;
-                            handleLineClick(e, fiber.id);
-                        },
-                        dblclick: () => {
-                            if (toolSelected.name !== toolsMap.POINTER.name) return;
-                            openFiberForm(fiber);
-                        },
-                    }}
-                >
-                    {toolSelected.name === toolsMap.POINTER.name && (
-                        <Popup>{calculateTotalDistance(positions)}</Popup>
-                    )}
-                </Polyline>
-                {console.log("recreando")}
-
-                <Markers fiber={fiber} positions={positions} />
-                <MarkersDrawer fiber={fiber} />
-            </div>
+            <Overlay key={type} name={type + "'s (" + fibers?.length + ")"} checked={true}>
+                <LayerGroup>
+                    {fibers.map((fiber) => {
+                        const positions = fiber?.fiber_markers?.map((point) => [
+                            point.latitude,
+                            point.longitude,
+                        ]);
+                        const markTool = Object.values(toolsMap).find((tool) => tool.name === type);
+                        return (
+                            <div key={fiber.id}>
+                                <Polyline
+                                    pathOptions={{ color: markTool.color }}
+                                    positions={positions}
+                                    weight={markTool.weight}
+                                    eventHandlers={{
+                                        click: (e) => {
+                                            if (toolSelected.name !== toolsMap.MOVE.name) return;
+                                            handleLineClick(e, fiber.id);
+                                        },
+                                        dblclick: () => {
+                                            if (toolSelected.name !== toolsMap.POINTER.name) return;
+                                            openFiberForm(fiber);
+                                        },
+                                    }}
+                                >
+                                    {toolSelected.name === toolsMap.POINTER.name && (
+                                        <Popup>{calculateTotalDistance(positions)}</Popup>
+                                    )}
+                                </Polyline>
+                                <Markers fiber={fiber} positions={positions} />
+                                <MarkersDrawer fiber={fiber} />
+                            </div>
+                        );
+                    })}
+                </LayerGroup>
+            </Overlay>
         );
     });
 }

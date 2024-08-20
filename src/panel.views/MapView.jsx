@@ -85,9 +85,10 @@ const LeafletMap = () => {
             center={[-2.3093213892775175, -78.12541130262117]}
             zoom={3}
         >
-            <MapLayerControl />
-            <MapMarkers />
-            <MapFibers />
+            <MapLayerControl>
+                <MapMarkers />
+                <MapFibers />
+            </MapLayerControl>
             <MapFiberMouseTooltip />
             <MapFiberMouseLine />
         </MapContainer>
