@@ -1,78 +1,53 @@
-import { useState } from "react";
-import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
+import { useEffect } from "react";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
-export default function Tests() {
-    const [positions, setPositions] = useState([
-        [51.505, -0.09],
-        [51.51, -0.1],
-        [51.515, -0.11],
-    ]);
+const OSRMRouting = () => {
+    const map = useMap();
 
-    console.log(positions);
+    useEffect(() => {
+        // Coordenadas de los puntos A y B (latitud, longitud) en Ecuador
+        const start = [-0.1807, -78.4678]; // Quito
+        const end = [-2.1894, -79.8891]; // Guayaquil
 
-    const handleLineClick = (e) => {
-        const clickedLatLng = e.latlng;
+        // const url = `http://router.project-osrm.org/route/v1/driving/${start.join(",")};${end.join(
+        //     ","
+        // )}?geometries=geojson`;
+        const url = `http://router.project-osrm.org/match/v1/driving/-0.1807,-78.4678;-2.1894,-79.8891?steps=true&geometries=polyline&overview=full&annotations=true`;
+        fetch(url)
+            .then((response) => {
+                // console.log(response);
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                // const route = data.routes[0].geometry.coordinates.map((coord) => [
+                //     coord[1],
+                //     coord[0],
+                // ]);
+                // L.polyline(route, { color: "blue", weight: 4 }).addTo(map);
+                // map.fitBounds(L.polyline(route).getBounds());
+            });
+    }, [map]);
 
-        // Encontrar el par de puntos más cercano
-        let closestIndex = 0;
-        let minDistance = Infinity;
+    return null;
+};
 
-        for (let i = 0; i < positions.length - 1; i++) {
-            const latlng1 = positions[i];
-            const latlng2 = positions[i + 1];
-
-            // Calcular el punto medio
-            const middleLatLng = {
-                lat: (latlng1[0] + latlng2[0]) / 2,
-                lng: (latlng1[1] + latlng2[1]) / 2,
-            };
-
-            // Calcular la distancia desde el punto clickeado al punto medio
-            const distance = Math.sqrt(
-                Math.pow(clickedLatLng.lat - middleLatLng.lat, 2) +
-                    Math.pow(clickedLatLng.lng - middleLatLng.lng, 2)
-            );
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestIndex = i;
-            }
-        }
-
-        // Calcular el nuevo punto medio entre los dos puntos más cercanos
-        const newPoint = [
-            (positions[closestIndex][0] + positions[closestIndex + 1][0]) / 2,
-            (positions[closestIndex][1] + positions[closestIndex + 1][1]) / 2,
-        ];
-
-        // Insertar el nuevo punto en la lista de posiciones
-        const newPositions = [
-            ...positions.slice(0, closestIndex + 1),
-            newPoint,
-            ...positions.slice(closestIndex + 1),
-        ];
-
-        setPositions(newPositions);
-    };
-
+const Tests = () => {
     return (
-        <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: "100vh", width: "100%" }}>
+        <MapContainer
+            center={[-1.8312, -78.1834]}
+            zoom={6}
+            style={{ height: "100vh", width: "100%" }}
+        >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            <Polyline
-                positions={positions}
-                color="blue"
-                weight={5}
-                eventHandlers={{
-                    click: handleLineClick,
-                }}
-            />
-            {positions.map((position, index) => (
-                <Marker key={index} position={position} />
-            ))}
+            <OSRMRouting />
         </MapContainer>
     );
-}
+};
+
+export default Tests;

@@ -9,7 +9,7 @@ import { MapviewProvider } from "./contexts/mapview";
 import { MarkersProvider } from "./contexts/markers";
 import { FibersProvider } from "./contexts/fibers";
 import SuperAdminGuard from "./guards/SuperAdminGuard";
-// import { MouseTooltipProvider } from "./contexts/mouseTooltip";
+// import Tests from "./views/Tests";
 
 const Home = lazy(() => import("./panel.views/Home"));
 const Entities = lazy(() => import("./panel.views/Entities"));
@@ -43,14 +43,12 @@ export default function RouterPanel() {
                             path="/map/:map_id"
                             element={
                                 <MapviewProvider>
-                                    {/* <MouseTooltipProvider> */}
                                     <MarkersProvider>
                                         <FibersProvider>
                                             <MapView />
                                             {/* <Tests /> */}
                                         </FibersProvider>
                                     </MarkersProvider>
-                                    {/* </MouseTooltipProvider> */}
                                 </MapviewProvider>
                             }
                         />
