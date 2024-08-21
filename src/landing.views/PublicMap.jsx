@@ -2,7 +2,7 @@ import "leaflet/dist/leaflet.css";
 import { LayerGroup, LayersControl, MapContainer, Marker, Polyline, Popup } from "react-leaflet";
 import { calculateTotalDistance, cls, getIconMarker } from "../lib/utils";
 import MapLayerControl from "../components/MapLayerControl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPublicMap } from "../services/combos";
 import { Link, useParams } from "react-router-dom";
 import { toolsMap } from "../lib/constants";
@@ -45,6 +45,10 @@ export default function PublicMap() {
 
 function LeafletMap() {
     const { map_id } = useParams();
+
+    const mapRef = useRef(null);
+    const firstLoad = useRef(true);
+
     const [markers, setMarkers] = useState(null);
     const [fibers, setFibers] = useState(null);
     useEffect(() => {
@@ -53,13 +57,32 @@ function LeafletMap() {
             setFibers(res?.data?.fibers);
         });
     }, [map_id]);
+
+    useEffect(() => {
+        if (!mapRef.current) return;
+        const map = mapRef.current;
+
+        if (markers === null || fibers === null) return;
+        if (!Array.isArray(markers) || !Array.isArray(fibers)) return;
+        if (markers.length === 0 && fibers.length === 0) return;
+        if (firstLoad.current === false) return;
+        if (firstLoad.current === true) firstLoad.current = false;
+
+        map.fitBounds([
+            ...markers.map((marker) => [marker.latitude, marker.longitude]),
+            ...fibers.map((fiber) =>
+                fiber.fiber_markers.map((fiber_marker) => [
+                    fiber_marker.latitude,
+                    fiber_marker.longitude,
+                ])
+            ),
+        ]);
+    }, [markers, fibers]);
+
     return (
         <MapContainer
             className={cls(" flex w-full h-full cursor-pointer ")}
-            center={{
-                lat: -2.3093213892775175,
-                lng: -78.12541130262117,
-            }}
+            center={[-2.3093213892775175, -78.12541130262117]}
             zoom={16}
             style={{
                 height: "100%",

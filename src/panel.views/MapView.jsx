@@ -74,9 +74,7 @@ export default function MapView() {
 
 const LeafletMap = () => {
     const { mapRef } = useContext(MapviewContext);
-    useMapView({
-        mapRef,
-    });
+    useMapView({ mapRef });
 
     return (
         <MapContainer
