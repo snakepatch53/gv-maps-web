@@ -61,7 +61,6 @@ function LeafletMap() {
     useEffect(() => {
         if (!mapRef.current) return;
         const map = mapRef.current;
-
         if (markers === null || fibers === null) return;
         if (!Array.isArray(markers) || !Array.isArray(fibers)) return;
         if (markers.length === 0 && fibers.length === 0) return;
@@ -81,9 +80,10 @@ function LeafletMap() {
 
     return (
         <MapContainer
+            ref={mapRef}
             className={cls(" flex w-full h-full cursor-pointer ")}
             center={[-2.3093213892775175, -78.12541130262117]}
-            zoom={16}
+            zoom={3}
             style={{
                 height: "100%",
                 width: "100%",
